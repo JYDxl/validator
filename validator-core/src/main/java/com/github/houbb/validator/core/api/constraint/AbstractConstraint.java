@@ -91,8 +91,11 @@ public abstract class AbstractConstraint<T> implements IConstraint {
      */
     protected String message(final IConstraintContext context) {
         final String defineMsg = context.message();
-        if(StringUtil.isNotEmpty(defineMsg)) {
-            return defineMsg;
+        if (StringUtil.isNotEmpty(defineMsg)) {
+            // 屏蔽javax注解默认配置的影响
+            if (!defineMsg.startsWith("{") || !defineMsg.endsWith("}")) {
+                return defineMsg;
+            }
         }
 
         // 获取默认内置注解的 i18n 消息

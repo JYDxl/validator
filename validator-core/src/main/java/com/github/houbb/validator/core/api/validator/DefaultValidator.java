@@ -1,5 +1,6 @@
 package com.github.houbb.validator.core.api.validator;
 
+import cn.hutool.core.util.ReflectUtil;
 import com.github.houbb.heaven.annotation.ThreadSafe;
 import com.github.houbb.heaven.support.handler.IHandler;
 import com.github.houbb.heaven.support.tuple.impl.Pair;
@@ -26,12 +27,17 @@ import com.github.houbb.validator.core.api.validator.entry.ValidEntryInstanceCon
 import com.github.houbb.validator.core.constant.AnnotationConst;
 import com.github.houbb.validator.core.jsr.util.JsrAtConstraintMapUtil;
 
-import javax.validation.ConstraintValidator;
+import com.google.common.collect.Streams;
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javax.validation.Valid;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.List;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * 默认的验证器实现
@@ -58,20 +64,21 @@ public class DefaultValidator extends AbstractValidator {
      *
      * @param fieldContext 上下文
      * @param field        字段信息
+     * @param clazz
      * @return 验证明细列表
      * @since 0.2.0
      */
     @Override
     @SuppressWarnings("unchecked")
     protected List<IValidEntry> buildValidatorEntryList(final IValidEntryFieldContext fieldContext,
-                                                        final Field field) {
+                                                        final Field field, Class clazz) {
         final List<IValidEntry> validatorEntryList = Guavas.newArrayList();
 
         // 针对注解属性，进行 condition 相关处理。
         final Object instance = fieldContext.instance();
         final Object fieldValue = ReflectFieldUtil.getValue(field, instance);
 
-        List<Pair<Annotation, IAnnotationConstraint>> pairList = filterConstraint(fieldContext, field);
+        List<Pair<Annotation, IAnnotationConstraint>> pairList = filterConstraint(fieldContext, field, clazz);
         for (Pair<Annotation, IAnnotationConstraint> pair : pairList) {
             // 当前字段约束存在
             Annotation annotation = pair.getValueOne();
@@ -243,13 +250,14 @@ public class DefaultValidator extends AbstractValidator {
      *
      * @param context 字段上下文
      * @param field   当前字段
+     * @param clazz
      * @return 符合约束的注解信息
      * @since 0.2.0
      */
     @SuppressWarnings("unchecked")
-    protected List<Pair<Annotation, IAnnotationConstraint>> filterConstraint(final IValidEntryFieldContext context, final Field field) {
+    protected List<Pair<Annotation, IAnnotationConstraint>> filterConstraint(final IValidEntryFieldContext context, final Field field, Class clazz) {
         Pair<List<Pair<Annotation, IAnnotationCondition>>,
-                List<Pair<Annotation, IAnnotationConstraint>>> pair = buildAnnotationPair(field);
+                List<Pair<Annotation, IAnnotationConstraint>>> pair = buildAnnotationPair(field, clazz);
         final List<Pair<Annotation, IAnnotationCondition>> conditionAtList = pair.getValueOne();
         final List<Pair<Annotation, IAnnotationConstraint>> constraintAtList = pair.getValueTwo();
 
@@ -353,19 +361,26 @@ public class DefaultValidator extends AbstractValidator {
      * （2）需要对应的注解信息，及对应的实现类。
      *
      * @param field 字段信息
+     * @param clazz
      * @return pair 结果
      * @since 0.2.0
      */
     private Pair<List<Pair<Annotation, IAnnotationCondition>>,
-            List<Pair<Annotation, IAnnotationConstraint>>> buildAnnotationPair(final Field field) {
+            List<Pair<Annotation, IAnnotationConstraint>>> buildAnnotationPair(final Field field, Class clazz) {
         List<Pair<Annotation, IAnnotationCondition>> conditionList = Guavas.newArrayList();
         List<Pair<Annotation, IAnnotationConstraint>> constraintList = Guavas.newArrayList();
 
         // 注解列表为空
         Annotation[] annotations = field.getAnnotations();
+        // 获取get方法上的注解
+        Method getMethod = ReflectUtil.getMethod(clazz, "get" + StringUtils.capitalize(field.getName()));
+        Annotation[] getMethodAnnotations = getMethod == null ? new Annotation[]{} : getMethod.getAnnotations();
+        Stream<Annotation> stream0 = Arrays.stream(annotations);
+        Stream<Annotation> stream1 = Arrays.stream(getMethodAnnotations);
+        List<Annotation> list = Streams.concat(stream0, stream1).collect(Collectors.toList());
 
         // 遍历注解列表
-        for (Annotation annotation : annotations) {
+        for (Annotation annotation : list) {
             // 判断是否为 condition
             Optional<IAnnotationCondition> conditionOptional = conditionOptional(annotation);
             if (conditionOptional.isNotPresent()) {

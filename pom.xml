@@ -6,7 +6,7 @@
 
     <groupId>com.github.houbb</groupId>
     <artifactId>validator</artifactId>
-    <version>0.7.0</version>
+    <version>0.7.1</version>
     <modules>
         <module>validator-api</module>
         <module>validator-core</module>
@@ -28,7 +28,7 @@
 
         <!--============================== MAIN ==============================-->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.compiler.level>1.7</project.compiler.level>
+        <project.compiler.level>1.8</project.compiler.level>
 
         <!--============================== INTER ==============================-->
         <heaven.version>0.2.0</heaven.version>
@@ -88,6 +88,24 @@
         <!--============================== INTER ==============================-->
 
         <!--============================== OTHER ==============================-->
+        <!-- https://mvnrepository.com/artifact/cn.hutool/hutool-all -->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>5.8.19</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.12.0</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>32.0.0-jre</version>
+        </dependency>
     </dependencies>
 
     <build>

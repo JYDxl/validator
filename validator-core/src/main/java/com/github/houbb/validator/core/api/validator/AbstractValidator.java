@@ -39,11 +39,12 @@ public abstract class AbstractValidator implements IValidator {
      *
      * @param context 上下文信息
      * @param field   字段信息
+     * @param clazz
      * @return 验证明细列表
      * @since 0.1.1
      */
     protected abstract List<IValidEntry> buildValidatorEntryList(final IValidEntryFieldContext context,
-                                                                 final Field field);
+                                                                 final Field field, Class clazz);
 
     /**
      * 构建验证明细列表
@@ -84,7 +85,7 @@ public abstract class AbstractValidator implements IValidator {
                 .fieldList(fieldList)
                 .instance(instance);
         for (Field field : fieldList) {
-            List<IValidEntry> fieldValidatorEntry = this.buildValidatorEntryList(fieldContext, field);
+            List<IValidEntry> fieldValidatorEntry = this.buildValidatorEntryList(fieldContext, field, clazz);
             validatorEntryList.addAll(fieldValidatorEntry);
         }
 
