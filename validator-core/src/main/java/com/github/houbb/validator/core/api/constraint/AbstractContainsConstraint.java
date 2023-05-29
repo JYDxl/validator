@@ -6,6 +6,7 @@ import com.github.houbb.heaven.util.lang.reflect.ClassTypeUtil;
 import com.github.houbb.validator.api.api.constraint.IConstraintContext;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 抽象约包含束实现
@@ -42,7 +43,7 @@ public abstract class AbstractContainsConstraint<T> extends AbstractConstraint<T
                 }
             } else {
                 // 因为 null 不会走到这里
-                if(value.equals(t)) {
+                if (Objects.equals(value.toString(), t.toString())) {
                     return true;
                 }
             }
