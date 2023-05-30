@@ -7,6 +7,10 @@ package com.github.houbb.validator.core.i18n;
 
 import java.util.Locale;
 import java.util.ResourceBundle;
+import javax.servlet.http.HttpServletRequest;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.servlet.support.RequestContextUtils;
 
 /**
  * <p> i18n 编码支持 </p>
@@ -32,12 +36,21 @@ public final class I18N {
      * @return 属性 I18n
      */
     public static String get(final String key) {
-        Locale currentLocale = Locale.getDefault();
+        Locale currentLocale = getLocale();
         ResourceBundle myResources = ResourceBundle.getBundle(DEFAULT_PROPERTIES_FILE_NAME, currentLocale);
 
         // jsr 做一次映射
         String mapKey = JavaxValidMessageUtil.getMapKey(key);
         return myResources.getString(mapKey);
+    }
+
+    private static Locale getLocale() {
+        ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        if (servletRequestAttributes == null) {
+            return Locale.getDefault();
+        }
+        HttpServletRequest request = servletRequestAttributes.getRequest();
+        return RequestContextUtils.getLocale(request);
     }
 
     /**
