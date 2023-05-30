@@ -1,5 +1,6 @@
 package com.github.houbb.validator.core.api.validator;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ReflectUtil;
 import com.github.houbb.heaven.annotation.ThreadSafe;
 import com.github.houbb.heaven.support.handler.IHandler;
@@ -26,17 +27,13 @@ import com.github.houbb.validator.core.api.validator.entry.ValidEntry;
 import com.github.houbb.validator.core.api.validator.entry.ValidEntryInstanceContext;
 import com.github.houbb.validator.core.constant.AnnotationConst;
 import com.github.houbb.validator.core.jsr.util.JsrAtConstraintMapUtil;
-
-import com.google.common.collect.Streams;
-import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-import javax.validation.Valid;
+import com.google.common.collect.Lists;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.List;
+import javax.validation.Valid;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -375,9 +372,9 @@ public class DefaultValidator extends AbstractValidator {
         // 获取get方法上的注解
         Method getMethod = ReflectUtil.getMethod(clazz, "get" + StringUtils.capitalize(field.getName()));
         Annotation[] getMethodAnnotations = getMethod == null ? new Annotation[]{} : getMethod.getAnnotations();
-        Stream<Annotation> stream0 = Arrays.stream(annotations);
-        Stream<Annotation> stream1 = Arrays.stream(getMethodAnnotations);
-        List<Annotation> list = Streams.concat(stream0, stream1).collect(Collectors.toList());
+        List<Annotation> list = Lists.newArrayListWithCapacity(annotations.length + getMethodAnnotations.length);
+        CollUtil.addAll(list, annotations);
+        CollUtil.addAll(list, getMethodAnnotations);
 
         // 遍历注解列表
         for (Annotation annotation : list) {
