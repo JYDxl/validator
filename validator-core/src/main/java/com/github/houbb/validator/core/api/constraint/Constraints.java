@@ -336,7 +336,7 @@ public final class Constraints {
      * @since 0.2.0
      */
     public static IConstraint notEmpty() {
-        return new NotEmptyConstraint();
+        return NotEmptyConstraint.getInstance();
     }
 
     /**
