@@ -23,7 +23,7 @@ import java.lang.annotation.*;
  */
 @Inherited
 @Documented
-@Target(ElementType.FIELD)
+@Target({ElementType.FIELD, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(AtRangesConstraint.class)
 public @interface Ranges {
