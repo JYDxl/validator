@@ -73,7 +73,11 @@ public final class ValidBs {
      * 对象信息
      * @since 0.1.0
      */
-    private Object value;
+    private static final ThreadLocal<Object> value = new ThreadLocal<>();
+
+    public static Object getValue() {
+        return value.get();
+    }
 
     /**
      * 指定验证的相关信息
@@ -102,7 +106,7 @@ public final class ValidBs {
     private static ValidBs on(final Object value,
                              final Collection<? extends IValidEntry> validatorEntries) {
         ValidBs validBs = new ValidBs();
-        validBs.value = value;
+        ValidBs.value.set(value);
         validBs.validatorEntries = buildValidatorEntries(value, validatorEntries);
         return validBs;
     }
@@ -236,7 +240,7 @@ public final class ValidBs {
         IValidatorContext context = DefaultValidatorContext.newInstance()
                 .fail(fail)
                 .group(group)
-                .value(value)
+                .value(value.get())
                 .validatorEntries(validatorEntries)
                 ;
 
