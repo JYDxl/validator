@@ -19,6 +19,14 @@ public interface IConstraintContext {
     Object value();
 
     /**
+     * 待验证的对象
+     *
+     * @return 待验证的对象
+     * @since 0.7.0
+     */
+    Object obj();
+
+    /**
      * 指定描述消息
      * @return 描述消息
      * @since 0.2.0

@@ -69,6 +69,11 @@ public class DefaultConstraintContext implements IConstraintContext {
         return this.value;
     }
 
+    @Override
+    public Object obj() {
+        return instance;
+    }
+
     public DefaultConstraintContext value(Object value) {
         this.value = value;
         return this;

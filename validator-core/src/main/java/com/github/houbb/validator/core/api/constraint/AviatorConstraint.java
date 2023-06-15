@@ -2,16 +2,15 @@ package com.github.houbb.validator.core.api.constraint;
 
 import com.github.houbb.heaven.annotation.ThreadSafe;
 import com.github.houbb.validator.api.api.constraint.IConstraintContext;
-import static com.google.common.collect.ImmutableMap.of;
+import com.googlecode.aviator.Expression;
 import static com.googlecode.aviator.AviatorEvaluator.getInstance;
 
-//TODO 测试
 @ThreadSafe
 public class AviatorConstraint extends AbstractConstraint<Object> {
-    private final String expression;
+    private final String expressionStr;
 
-    public AviatorConstraint(String expression) {
-        this.expression = expression;
+    public AviatorConstraint(String expressionStr) {
+        this.expressionStr = expressionStr;
     }
 
     @Override
@@ -19,6 +18,7 @@ public class AviatorConstraint extends AbstractConstraint<Object> {
         if (value == null) {
             return true;
         }
-        return (boolean) getInstance().compile(expression).execute(of("arg", value));
+        Expression expression = getInstance().compile(expressionStr);
+        return (boolean) expression.execute(expression.newEnv("obj", context.obj()));
     }
 }

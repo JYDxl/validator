@@ -3,7 +3,6 @@ package com.github.houbb.validator.core.api.constraint;
 import cn.hutool.extra.spring.SpringUtil;
 import com.github.houbb.heaven.annotation.ThreadSafe;
 import com.github.houbb.validator.api.api.constraint.IConstraintContext;
-import com.github.houbb.validator.core.bs.ValidBs;
 import org.springframework.context.expression.BeanFactoryResolver;
 import org.springframework.expression.Expression;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
@@ -29,6 +28,6 @@ public class SpelConstraint extends AbstractConstraint<Object> {
     @Override
     protected boolean pass(IConstraintContext context, Object value) {
         Expression parseExpression = expressionParser.parseExpression(expressionString);
-        return Boolean.TRUE.equals(parseExpression.getValue(evaluationContext.get(), ValidBs.getValue(), Boolean.class));
+        return Boolean.TRUE.equals(parseExpression.getValue(evaluationContext.get(), context.obj(), Boolean.class));
     }
 }
