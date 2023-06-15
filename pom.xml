@@ -116,6 +116,13 @@
             <version>2.7.12</version>
             <scope>provided</scope>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/com.googlecode.aviator/aviator -->
+        <dependency>
+            <groupId>com.googlecode.aviator</groupId>
+            <artifactId>aviator</artifactId>
+            <version>5.3.3</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
     <build>
