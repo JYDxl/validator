@@ -93,7 +93,7 @@ public abstract class AbstractConstraint<T> implements IConstraint {
         final String defineMsg = context.message();
         if (StringUtil.isNotEmpty(defineMsg)) {
             // 屏蔽javax注解默认配置的影响
-            if (!defineMsg.startsWith("{") || !defineMsg.endsWith("}")) {
+            if (!defineMsg.startsWith("{javax.validation.constraints.")) {
                 return defineMsg;
             }
         }

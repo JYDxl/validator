@@ -21,7 +21,7 @@ import java.lang.annotation.*;
  */
 @Inherited
 @Documented
-@Target(ElementType.FIELD)
+@Target({ElementType.FIELD, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(AtHasNotNullConstraint.class)
 public @interface HasNotNull {
