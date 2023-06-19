@@ -27,6 +27,9 @@ public class SpelConstraint extends AbstractConstraint<Object> {
 
     @Override
     protected boolean pass(IConstraintContext context, Object value) {
+        if (value == null) {
+            return true;
+        }
         Expression parseExpression = expressionParser.parseExpression(expressionString);
         return Boolean.TRUE.equals(parseExpression.getValue(evaluationContext.get(), context.obj(), Boolean.class));
     }
