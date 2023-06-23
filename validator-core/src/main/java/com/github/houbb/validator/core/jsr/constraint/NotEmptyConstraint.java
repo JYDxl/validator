@@ -36,16 +36,16 @@ public class NotEmptyConstraint extends AbstractConstraint<Object> {
     @Override
     protected boolean pass(IConstraintContext context, Object value) {
       if (value == null) {
-        return false;
+        return true;
       }
       if (value instanceof String) {
         return StringUtil.isNotEmpty((String) value);
       }
       if (value instanceof Collection) {
-        return ((Collection) value).size() > 0;
+        return !((Collection) value).isEmpty();
       }
       if (value instanceof Map) {
-        return ((Map) value).size() > 0;
+        return !((Map) value).isEmpty();
       }
       if (ArrayUtil.isArray(value)) {
         return ArrayUtil.isNotEmpty(value);
